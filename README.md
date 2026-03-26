@@ -24,10 +24,17 @@ This project demonstrates a high-performance backend architecture designed for a
 | **Tracking** | UUID v4 (Request Tracking) |
 
 ---
-2. Launch the SystemStart Backend:Bashnode index.js
-Start Frontend:Bashcd client
+### 2. Launch the System**Start Backend:**```bash
+
+node index.js
+
+Start Frontend:
+Bash
+cd client
 npm install
 npm run dev
+
+
 
 📋 Business Logic Example
 The engine evaluates users based on a multi-stage workflow:
