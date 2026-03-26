@@ -28,9 +28,14 @@ This project demonstrates a high-performance backend architecture designed for a
 Start Frontend:Bashcd client
 npm install
 npm run dev
-📋 Business Logic ExampleThe engine evaluates users based on a multi-stage workflow:
-Age Check: Must be $\ge$ 18.
-Income Check: Must be $\ge$ 25,000.
+📋 Business Logic Example
+The engine evaluates users based on a multi-stage workflow:
+
+Age Check: Must be >= 18.
+
+Income Check: Must be >= 25,000.
+
 Audit Log: If rejected, the system logs the exact failure point (e.g., "Criteria failed: Low Income").
+
 Developed with 💜 by Ambuj Saxena
 
