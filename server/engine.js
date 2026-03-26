@@ -4,16 +4,15 @@ const evaluate = async (requestId, userData, workflowConfig) => {
     // 1. Idempotency Check
     const existing = await Decision.findOne({ requestId });
     if (existing) {
-        return { ...existing._doc, isDuplicate: true, message: "IDEMPOTENCY: Returning cached result." };
+        return { ...existing._doc, isDuplicate: true };
     }
 
     let auditLog = [];
     let overallStatus = 'Approved';
 
-    // 2. Multi-Step Evaluation
+    // 2. Evaluation Logic
     for (const stage of workflowConfig.stages) {
         let stagePassed = true;
-
         for (const rule of stage.rules) {
             const userValue = userData[rule.field];
             let rulePassed = false;
@@ -24,9 +23,9 @@ const evaluate = async (requestId, userData, workflowConfig) => {
 
             auditLog.push({
                 stage: stage.stageName,
-                rule: rule.field,
-                status: rulePassed ? 'PASSED' : (rule.isMandatory ? 'FAILED' : 'WARNING'),
-                message: rulePassed ? 'Criteria met' : rule.failMessage
+                field: rule.field,
+                status: rulePassed ? 'PASSED' : 'FAILED',
+                message: rulePassed ? `Criteria met: ${rule.field} check` : rule.failMessage
             });
 
             if (!rulePassed && rule.isMandatory) {
@@ -34,12 +33,14 @@ const evaluate = async (requestId, userData, workflowConfig) => {
                 overallStatus = 'Rejected';
             }
         }
-        if (!stagePassed) break; // Conditional Branching
+        if (!stagePassed) break;
     }
 
+    // 3. Save to Database
     const decision = new Decision({
         requestId,
-        userName: userData.name || "Anonymous",
+        userName: userData.name,
+        age: userData.age, // Saves the actual age entered
         status: overallStatus,
         auditLog: auditLog
     });

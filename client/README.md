@@ -1,74 +1,72 @@
-🛡️ Resilient Decision Engine
-A robust, full-stack automated decisioning system designed to handle user applications through a configurable rules engine. This project focuses on high availability, auditability, and engineering excellence.
+🛡️ Resilient Decision Engine (Hackathon Submission)
+A robust, full-stack automated decisioning system built with a decoupled rules engine to handle complex user applications. This project focuses on Engineering Robustness, Auditability, and High Availability.
 
-🚀 Key Features (Engineering Highlights)
-1. Explainable AI & Auditability
-Every decision made by the system is stored in a MongoDB Audit Trail.
+🚀 Engineering Highlights
+1. Explainable AI & Auditability (Requirement #10)
+Unlike "black-box" systems, every decision is stored in a MongoDB Audit Trail.
 
-Each record includes a "Rule Trace" (Reasoning).
+Rule Trace: Every response includes a detailed breakdown of which specific rules passed or failed.
 
-Provides a full history of why a user was Approved or Rejected.
+Reasoning: Provides a full history for "Approved" or "Rejected" states, ensuring compliance and transparency.
 
-Meets the requirement for transparent decision-making.
+2. Idempotency & Atomic Requests (Requirement #16)
+The system is built to be Fault-Tolerant.
 
-2. Idempotency (Duplicate Protection)
-The system is built to be resilient. If the same user data is submitted multiple times (e.g., due to a slow network or double-clicking), the backend identifies the duplicate and returns the cached result instead of cluttering the database or wasting processing power.
+Duplicate Protection: Uses a unique requestId to identify duplicate submissions (e.g., from network retries).
 
-3. Configurable Workflow Engine
-Instead of hardcoding "Age > 18," I built a Workflow Schema.
+Cached Results: If a duplicate is detected, the system returns the existing result instantly without re-processing, preserving database integrity.
 
-Rules are fetched dynamically from the database.
+3. Stateless Workflow Engine (Requirement #17)
+Logic is decoupled from the API layer using a standalone engine.js.
 
-Logic is decoupled from the main server code using a standalone engine.js.
+Dynamic Config: Rules are not hardcoded. They are fetched from a Workflow schema, allowing business logic updates (e.g., changing "Age > 18" to "Age > 21") without a single line of code change.
 
-Allows for "Business Logic" updates without redeploying code.
+Multi-Step Evaluation: Supports "Stages" to handle complex, multi-layered decisioning.
 
-4. External Dependency Simulation
-The system simulates an external "Blacklist Service" check before running internal rules, demonstrating how the engine handles third-party service integration.
+4. Failure Handling (Requirement #28)
+The system simulates an External Bureau Dependency with a built-in 10% failure rate.
+
+Graceful Degradation: Instead of crashing, the system catches timeouts and returns a 503 Service Unavailable with a retry suggestion, demonstrating professional error handling.
 
 🛠️ Tech Stack
-Frontend: React.js + Vite (Custom Glassmorphism UI)
+Frontend: React.js + Vite (Modern Glassmorphism UI)
 
 Backend: Node.js + Express
 
-Database: MongoDB (Mongoose ODM)
+Database: MongoDB + Mongoose (Document-based for flexible rule schemas)
 
-Communication: Axios for REST API calls
+Testing: Axios + UUID for automated robustness verification
 
-📂 Project Structure
-Plaintext
-decision-system/
-├── client/              # React Frontend (Vite)
-│   └── src/App.jsx      # Modern UI & State Management
-├── server/              # Node.js Backend
-│   ├── models/          # Database Schemas
-│   │   ├── Decision.js  # Audit Logs
-│   │   └── Workflow.js  # Rule Configurations
-│   ├── engine.js        # The Core Logic (Brain)
-│   └── index.js         # API & Idempotency Logic
-└── README.md            # You are here!
-⚡ How to Run
-1. Start the Backend
+⚡ Setup & Installation
+1. Database Setup
+Ensure MongoDB is running locally, then seed the initial rules:
+
 Bash
 cd server
 npm install
-node index.js
-Wait for "✅ MongoDB Connected" message.
-
-2. Start the Frontend
+node seed.js
+2. Start the Backend
 Bash
-cd client
+node index.js
+Wait for: ✅ MongoDB Connected Successfully
+
+3. Start the Frontend
+Bash
+cd ../client
 npm install
 npm run dev
-Open the provided Local link (usually http://localhost:5173 or 5174).
+🧪 Automated Verification (For Judges)
+To verify the Idempotency and Rule Evaluation requirements without using the UI, run my custom test suite:
 
-🧪 Testing the Robustness
-The Adult Rule: Enter Name: Shivam, Age: 22 -> Approved.
+Bash
+cd server
+node test-system.js
+This script proves:
 
-The Minor Rule: Enter Name: Kid, Age: 12 -> Rejected.
+Happy Path: Successful rule processing.
 
-The Idempotency Check: Submit the same name twice; notice the instant response and recorded trace.
+Idempotency: Instant recognition of duplicate requestId.
 
-The Blacklist Check: (Optional) If you manually add "BadActor" to the engine blacklist, the system rejects immediately regardless of age.
+Audit Log: Verification of the rule trace in the JSON response.
 
-Developed with focus on Scalability and Explainability.
+Developed with a focus on Scalability, Explainability, and Atomic State Management.
