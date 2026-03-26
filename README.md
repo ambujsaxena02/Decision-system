@@ -26,11 +26,19 @@ This project demonstrates a high-performance backend architecture designed for a
 ---
 2. Launch the System
 Start Backend:
+
+
 node index.js
 
 Start Frontend:
+
+
 cd client
+
+
 npm install
+
+
 npm run dev
 
 📋 Business Logic Example
