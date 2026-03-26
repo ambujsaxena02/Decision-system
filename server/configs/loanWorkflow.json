@@ -1,0 +1,19 @@
+{
+  "workflowId": "LOAN_APP_V1",
+  "steps": [
+    {
+      "ruleId": "REQ_01",
+      "name": "Check Annual Income",
+      "field": "income",
+      "operator": "greater_than",
+      "value": 30000
+    },
+    {
+      "ruleId": "REQ_02",
+      "name": "Check Credit Score",
+      "field": "creditScore",
+      "operator": "greater_than",
+      "value": 650
+    }
+  ]
+}

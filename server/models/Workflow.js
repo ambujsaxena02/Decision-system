@@ -1,13 +1,19 @@
 const mongoose = require('mongoose');
 
 const WorkflowSchema = new mongoose.Schema({
-    name: String, // e.g., "Student-Onboarding"
-    rules: [
+    name: String, 
+    stages: [
         {
-            field: String,     // e.g., "age"
-            operator: String,  // e.g., ">="
-            value: Number,     // e.g., 18
-            failMessage: String 
+            stageName: String,
+            rules: [
+                {
+                    field: String,
+                    operator: String,
+                    value: Number,
+                    failMessage: String,
+                    isMandatory: { type: Boolean, default: true }
+                }
+            ]
         }
     ]
 });

@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
-// This tracks every request and its "Rule Trace" for full Auditability
 const DecisionSchema = new mongoose.Schema({
+    requestId: { type: String, unique: true },
     userName: String,
-    age: Number,
-    status: { type: String, enum: ['Approved', 'Rejected', 'Manual Review'] }, // State management
-    auditLog: [String], // Records exactly which rules were triggered
+    status: String,
+    auditLog: Array,
     createdAt: { type: Date, default: Date.now }
 });
 
